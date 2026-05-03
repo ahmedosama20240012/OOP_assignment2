@@ -1,15 +1,12 @@
 #include <iostream>
 
+#include "product.h"
+
 
 int main() {
 
-    auto lang = "C++";
-    std::cout << "Hello and welcome to " << lang << "!\n";
-
-    for (int i = 1; i <= 5; i++) {
-
-        std::cout << "i = " << i << std::endl;
-    }
+    Book b1(1,"intro to datascience", 400.75, 35, "Harry", 450  );
+    b1.display_details();
 
     return 0;
 }
