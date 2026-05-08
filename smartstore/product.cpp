@@ -4,17 +4,15 @@
 #include <iomanip>
 using namespace std;
 
-// Static member init
 int Product::totalProducts = 0;
 
-//Product
 Product::Product() : productId(0), name(""), price(0.0), available_quantity(0) {}
 
 Product::Product(int id, string name, double price, int available_quantity)
     : productId(id), name(name), price(price), available_quantity(available_quantity)
 {
-    if (price < 0)            throw NegativePriceException();
-    if (available_quantity < 0) throw NegativeQuantityException();
+    if (price < 0)               throw NegativePriceException();
+    if (available_quantity < 0)  throw NegativeQuantityException();
     totalProducts++;
 }
 
@@ -24,37 +22,32 @@ int    Product::getId()       const { return productId; }
 int    Product::getQuantity() const { return available_quantity; }
 
 void Product::printTotalProducts() {
-    cout << "\n Total Products in Store: " << totalProducts << endl;
+    cout << "\n Total Products in Store: " << totalProducts << "\n";
 }
 
 int Product::getTotalProducts() { return totalProducts; }
 
-// Purchase operation throws if not enough stock
 void Product::purchase(int qty) {
-    if (qty < 0)                   throw NegativeQuantityException();
-    if (qty > available_quantity)  throw InsufficientStockException(qty, available_quantity);
+    if (qty < 0)                  throw NegativeQuantityException();
+    if (qty > available_quantity) throw InsufficientStockException(qty, available_quantity);
     available_quantity -= qty;
     cout << "  Purchased " << qty << " unit(s) of \"" << name
-         << "\". Remaining stock: " << available_quantity << endl;
+         << "\". Remaining stock: " << available_quantity << "\n";
 }
 
-// operator+ : add qty to stock
 Product& Product::operator+(int qty) {
     if (qty < 0) throw NegativeQuantityException();
     available_quantity += qty;
     return *this;
 }
 
-// operator== : two products are equal when their prices match
 bool Product::operator==(const Product& other) const {
     return price == other.price;
 }
 
-// operator<< : print product details to any stream
 ostream& operator<<(ostream& os, const Product& p) {
     os << fixed << setprecision(2);
-    os << "[" << p.getType() << "] "
-       << "ID=" << p.productId
+    os << "[" << p.getType() << "] ID=" << p.productId
        << " | Name: " << p.name
        << " | Price: $" << p.price
        << " | Qty: " << p.available_quantity;
@@ -62,34 +55,34 @@ ostream& operator<<(ostream& os, const Product& p) {
 }
 
 void Product::display_details() const {
-    cout << "\n";
-    cout << "Product's ID: "                 << productId          << endl;
-    cout << "Product's Name: "               << name               << endl;
     cout << fixed << setprecision(2);
-    cout << "Product's Price: $"             << price              << endl;
-    cout << "Product's Available Quantity: " << available_quantity << endl;
+    cout << "\n";
+    cout << "  Product ID       : " << productId          << "\n";
+    cout << "  Name             : " << name               << "\n";
+    cout << "  Price            : $" << price             << "\n";
+    cout << "  Available Stock  : " << available_quantity << "\n";
 }
 
 void Product::saveToFile(ofstream& ofs) const {
-    ofs << getType() << "\n"
-        << productId << "\n"
-        << name      << "\n"
-        << price     << "\n"
-        << available_quantity << "\n";
+    ofs << getType()            << "\n"
+        << productId            << "\n"
+        << name                 << "\n"
+        << price                << "\n"
+        << available_quantity   << "\n";
 }
 
 void more_expensive(const Product& p1, const Product& p2) {
+    cout << fixed << setprecision(2);
     if (p1.price > p2.price)
         cout << "  \"" << p1.name << "\" ($" << p1.price
-             << ") is more expensive than \"" << p2.name << "\" ($" << p2.price << ")" << endl;
+             << ") is more expensive than \"" << p2.name << "\" ($" << p2.price << ")\n";
     else if (p2.price > p1.price)
         cout << "  \"" << p2.name << "\" ($" << p2.price
-             << ") is more expensive than \"" << p1.name << "\" ($" << p1.price << ")" << endl;
+             << ") is more expensive than \"" << p1.name << "\" ($" << p1.price << ")\n";
     else
-        cout << "  \"" << p1.name << "\" and \"" << p2.name << "\" have the same price." << endl;
+        cout << "  \"" << p1.name << "\" and \"" << p2.name << "\" have the same price.\n";
 }
 
-// Book
 Book::Book() : author(""), number_of_pages(0) {}
 
 Book::Book(int id, string name, double price, int available_quantity,
@@ -99,17 +92,15 @@ Book::Book(int id, string name, double price, int available_quantity,
 
 void Book::display_details() const {
     Product::display_details();
-    cout << "Author: "          << author          << endl;
-    cout << "Number of Pages: " << number_of_pages << endl;
+    cout << "  Author           : " << author          << "\n";
+    cout << "  Number of Pages  : " << number_of_pages << "\n";
 }
 
 void Book::saveToFile(ofstream& ofs) const {
     Product::saveToFile(ofs);
-    ofs << author          << "\n"
-        << number_of_pages << "\n";
+    ofs << author << "\n" << number_of_pages << "\n";
 }
 
-// Electronic_device
 Electronic_device::Electronic_device() : brand(""), warranty(0) {}
 
 Electronic_device::Electronic_device(int id, string name, double price,
@@ -118,17 +109,15 @@ Electronic_device::Electronic_device(int id, string name, double price,
 
 void Electronic_device::display_details() const {
     Product::display_details();
-    cout << "Brand: "   << brand   << endl;
-    cout << "Warranty: " << warranty << " year(s)" << endl;
+    cout << "  Brand            : " << brand   << "\n";
+    cout << "  Warranty         : " << warranty << " year(s)\n";
 }
 
 void Electronic_device::saveToFile(ofstream& ofs) const {
     Product::saveToFile(ofs);
-    ofs << brand   << "\n"
-        << warranty << "\n";
+    ofs << brand << "\n" << warranty << "\n";
 }
 
-// Office_supply
 Office_supply::Office_supply() : category(""), material("") {}
 
 Office_supply::Office_supply(int id, string name, double price,
@@ -137,28 +126,24 @@ Office_supply::Office_supply(int id, string name, double price,
 
 void Office_supply::display_details() const {
     Product::display_details();
-    cout << "Category: " << category << endl;
-    cout << "Material: " << material << endl;
+    cout << "  Category         : " << category << "\n";
+    cout << "  Material         : " << material  << "\n";
 }
 
 void Office_supply::saveToFile(ofstream& ofs) const {
     Product::saveToFile(ofs);
-    ofs << category << "\n"
-        << material  << "\n";
+    ofs << category << "\n" << material << "\n";
 }
 
-// File I/O
 void saveAllProducts(const vector<Product*>& products, const string& filename) {
     ofstream ofs(filename);
     if (!ofs.is_open())
         throw FileException("Error: Cannot open file \"" + filename + "\" for writing!");
-
     ofs << products.size() << "\n";
     for (const auto* p : products)
         p->saveToFile(ofs);
-
     ofs.close();
-    cout << "  Saved " << products.size() << " product(s) to \"" << filename << "\"" << endl;
+    cout << "  Saved " << products.size() << " product(s) to \"" << filename << "\"\n";
 }
 
 void loadAndPrintProducts(const string& filename) {
@@ -170,49 +155,42 @@ void loadAndPrintProducts(const string& filename) {
     ifs >> count;
     ifs.ignore();
 
-    cout << "\n  --- Products loaded from \"" << filename << "\" ---" << endl;
+    cout << "\n  --- Products loaded from \"" << filename << "\" ---\n";
+    cout << fixed << setprecision(2);
 
     for (int i = 0; i < count; i++) {
         string type;
         getline(ifs, type);
-
-        int    id, qty;
+        int id, qty;
         string name;
         double price;
-
         ifs >> id; ifs.ignore();
         getline(ifs, name);
         ifs >> price; ifs.ignore();
-        ifs >> qty;  ifs.ignore();
+        ifs >> qty;   ifs.ignore();
 
         if (type == "Book") {
             string author;
-            int    pages;
+            int pages;
             getline(ifs, author);
             ifs >> pages; ifs.ignore();
-            cout << "  Book: " << name << " | Author: " << author
-                 << " | Pages: " << pages
-                 << " | Price: $" << price << " | Qty: " << qty << endl;
+            cout << "  Book        : " << name << " | Author: " << author
+                 << " | Pages: " << pages << " | Price: $" << price << " | Qty: " << qty << "\n";
         }
         else if (type == "Electronic") {
             string brand;
-            int    warranty;
+            int warranty;
             getline(ifs, brand);
             ifs >> warranty; ifs.ignore();
-            cout << "  Electronic: " << name << " | Brand: " << brand
-                 << " | Warranty: " << warranty << "yr"
-                 << " | Price: $" << price << " | Qty: " << qty << endl;
+            cout << "  Electronic  : " << name << " | Brand: " << brand
+                 << " | Warranty: " << warranty << "yr | Price: $" << price << " | Qty: " << qty << "\n";
         }
         else if (type == "OfficeSupply") {
             string category, material;
             getline(ifs, category);
             getline(ifs, material);
             cout << "  OfficeSupply: " << name << " | Cat: " << category
-                 << " | Material: " << material
-                 << " | Price: $" << price << " | Qty: " << qty << endl;
-        }
-        else {
-            cout << "  Unknown type: " << type << endl;
+                 << " | Material: " << material << " | Price: $" << price << " | Qty: " << qty << "\n";
         }
     }
     ifs.close();

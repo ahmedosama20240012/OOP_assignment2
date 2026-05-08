@@ -1,148 +1,176 @@
 #include <iostream>
 #include <vector>
 #include "product.h"
+#include "order.h"
 using namespace std;
 
-// Helper to print section headers
-void section(const string& title) {
-    cout << "\n" << string(55, '=') << endl;
-    cout << "  " << title << endl;
-    cout << string(55, '=') << endl;
+void separator(const string& title) {
+    cout << "\n\n>>> " << title << "\n";
+    cout << string(50, '-') << "\n";
 }
 
 int main() {
 
-    //  Create at least 4 products
-    section("1. Creating Products (at least 4)");
+    separator("PART 1 - Product Management");
 
-    Book             b1(1, "Harry Potter",  400.0,  35, "J.K. Rowling", 450);
-    Book             b2(2, "Clean Code",    500.0, 300, "Robert Martin", 600);
-    Electronic_device e1(3, "Laptop",      1500.0,  10, "Dell",          2);
-    Electronic_device e2(4, "Headphones",   200.0,  50, "Sony",          1);
-    Office_supply    o1(5, "Stapler",        15.0, 100, "Fasteners",  "Metal");
-    Office_supply    o2(6, "Notebook",       25.0, 200, "Stationery", "Paper");
+    separator("1. Creating Products");
+    Book             b1(101, "Brain Storming",  150.0,  5, "Ahmed Osama",   800);
+    Book             b2(102, "OOP Level 2",      50.0, 20, "Sultan Ali",    400);
+    Electronic_device e1(201, "Laptop",         1200.0,  3, "HP",             2);
+    Electronic_device e2(202, "Wireless Mouse",   35.0, 15, "Logitech",       1);
+    Office_supply    o1(301, "Table",            300.0, 10, "Equipment",   "Wood");
+    Office_supply    o2(302, "Notebook",          20.0, 50, "Stationery",  "Paper");
+    cout << "  6 products created successfully.\n";
 
-    cout << "  Created 6 products successfully." << endl;
-
-    //  base class pointers + overridden display_details
-    section("2. Polymorphism & Overridden display_details()");
-
-    vector<Product*> store;
-    store.push_back(&b1);
-    store.push_back(&b2);
-    store.push_back(&e1);
-    store.push_back(&e2);
-    store.push_back(&o1);
-    store.push_back(&o2);
-
-    for (Product* p : store)
-        p->display_details();
-
-    // Static function
-    section("3. Static Function: printTotalProducts()");
+    separator("2. Static Function - Total Products");
     Product::printTotalProducts();
 
-    // Friend function: more_expensive
-    section("4. Friend Function: more_expensive()");
-    cout << "  b1 vs b2: ";    more_expensive(b1, b2);
-    cout << "  e1 vs e2: ";    more_expensive(e1, e2);
-    cout << "  o1 vs o2: ";    more_expensive(o1, o2);
+    separator("3. Polymorphism - display_details() via base pointer");
+    vector<Product*> store_products = { &b1, &b2, &e1, &e2, &o1, &o2 };
+    for (Product* p : store_products)
+        p->display_details();
 
-    // Template function: highest_price
-    section("5. Template Function: highest_price()");
-    Product* most_expensive = highest_price(store);
-    cout << "  Most expensive product: " << *most_expensive << endl;
+    separator("4. Friend Function - more_expensive()");
+    more_expensive(b1, e1);
+    more_expensive(b2, o2);
+    more_expensive(e1, o1);
 
-    // Template function: swapItem
-    section("6. Template Function: swapItems()");
-    cout << "  Before swap:" << endl;
-    cout << "    b1: " << b1 << endl;
-    cout << "    b2: " << b2 << endl;
+    separator("5. Template Function - highest_price()");
+    Product* expensive = highest_price(store_products);
+    cout << "  Most expensive: " << *expensive << "\n";
+
+    separator("6. Template Function - swapItems()");
+    cout << "  Before swap:\n";
+    cout << "    b1: " << b1 << "\n";
+    cout << "    b2: " << b2 << "\n";
     swapItems(b1, b2);
-    cout << "  After swap:" << endl;
-    cout << "    b1: " << b1 << endl;
-    cout << "    b2: " << b2 << endl;
+    cout << "  After swap:\n";
+    cout << "    b1: " << b1 << "\n";
+    cout << "    b2: " << b2 << "\n";
+    swapItems(b1, b2);
 
-    // Operator Overloading
-    section("7. Operator Overloading");
+    separator("7. Operator Overloading");
+    cout << "  [operator+]  Adding 10 units to Wireless Mouse stock:\n";
+    cout << "    Before: " << e2 << "\n";
+    e2 + 10;
+    cout << "    After : " << e2 << "\n";
 
-    // operator+ : add stock
-    cout << "  [+] Adding 20 units to e1 (Laptop)..." << endl;
-    cout << "    Before: " << e1 << endl;
-    e1 + 20;
-    cout << "    After:  " << e1 << endl;
+    cout << "\n  [operator==] Compare products by price:\n";
+    cout << "    b1 == b2 ? " << (b1 == b2 ? "YES (same price)" : "NO (different)") << "\n";
+    cout << "    e1 == o1 ? " << (e1 == o1 ? "YES (same price)" : "NO (different)") << "\n";
 
-    // operator== : compare by price
-    cout << "\n  [==] Comparing products by price:" << endl;
-    cout << "    b1 == b2 ? " << (b1 == b2 ? "Yes (same price)" : "No (different prices)") << endl;
-    cout << "    o1 == o2 ? " << (o1 == o2 ? "Yes (same price)" : "No (different prices)") << endl;
+    cout << "\n  [operator<<] Stream all products:\n";
+    for (Product* p : store_products)
+        cout << "    " << *p << "\n";
 
-    // operator<< : stream output
-    cout << "\n  [<<] Streaming products with operator<<:" << endl;
-    for (Product* p : store)
-        cout << "    " << *p << endl;
-
-    // Purchase operation
-    section("8. Purchase Operations");
-    cout << "  Purchasing 5 units of Headphones (stock=" << e2.getQuantity() << "):" << endl;
-    e2.purchase(5);
-    cout << "  Purchasing 10 units of Stapler   (stock=" << o1.getQuantity() << "):" << endl;
-    o1.purchase(10);
-
-    // File I/O
-    section("9. File I/O: Save & Read");
-    const string filename = "products.txt";
-
+    separator("8. File I/O - Save and Load");
     try {
-        saveAllProducts(store, filename);
-        loadAndPrintProducts(filename);
+        saveAllProducts(store_products, "products.txt");
+        loadAndPrintProducts("products.txt");
     }
     catch (const FileException& e) {
-        cerr << "  FILE ERROR: " << e.what() << endl;
+        cout << "  FILE ERROR: " << e.what() << "\n";
     }
 
-    // Exception Handling
-    section("10. Exception Handling");
+    separator("9. Exception Handling");
 
-    // Case 1: Negative price
-    cout << "  [Test 1] Creating product with negative price (-50):" << endl;
+    cout << "  [Case 1] Negative price:\n";
     try {
-        Book bad1(99, "BadBook", -50.0, 10, "Nobody", 100);
+        Book bad(999, "Bad Book", -100.0, 5, "Nobody", 10);
     }
     catch (const NegativePriceException& e) {
-        cout << "    CAUGHT -> " << e.what() << endl;
+        cout << "  CAUGHT -> " << e.what() << "\n";
     }
 
-    // Case 2: Negative quantity
-    cout << "\n  [Test 2] Creating product with negative quantity (-5):" << endl;
+    cout << "\n  [Case 2] Negative quantity:\n";
     try {
-        Electronic_device bad2(98, "BadDevice", 200.0, -5, "NoName", 1);
+        Electronic_device bad(998, "Bad Device", 200.0, -3, "Brand", 1);
     }
     catch (const NegativeQuantityException& e) {
-        cout << "    CAUGHT -> " << e.what() << endl;
+        cout << "  CAUGHT -> " << e.what() << "\n";
     }
 
-    // Case 3: Purchasing more than available stock
-    cout << "\n  [Test 3] Purchasing 9999 units of Laptop (stock=" << e1.getQuantity() << "):" << endl;
+    cout << "\n  [Case 3] Purchase more than available stock:\n";
     try {
-        e1.purchase(9999);
+        b1.purchase(9999);
     }
     catch (const InsufficientStockException& e) {
-        cout << "    CAUGHT -> " << e.what()
+        cout << "  CAUGHT -> " << e.what()
              << " (Requested: " << e.getRequested()
-             << ", Available: " << e.getAvailable() << ")" << endl;
+             << ", Available: " << e.getAvailable() << ")\n";
     }
 
-    // Case 4: File error
-    cout << "\n  [Test 4] Reading from a non-existent file:" << endl;
+    cout << "\n  [Case 4] Read from non-existent file:\n";
     try {
-        loadAndPrintProducts("ghost_file_xyz.txt");
+        loadAndPrintProducts("missing_file.txt");
     }
     catch (const FileException& e) {
-        cout << "    CAUGHT -> " << e.what() << endl;
+        cout << "  CAUGHT -> " << e.what() << "\n";
     }
 
-    section("All Tests Completed Successfully!");
+    separator("PART 2 - Orders, Payments & Delivery");
 
+    separator("10. Creating Customers");
+    regularCustomer cust1(1, "Ahmed",    "01123311123");
+    PremiumCustomer cust2(2, "Abdullah", "01023234110", 15.0);
+    cout << "  Regular customer and Premium customer created.\n";
+
+    separator("11. Order 1 - Regular Customer, Cash, with Delivery");
+    Order ord1(5001, "2026-05-04", &cust1);
+    ord1.addItem(&b1, 1);
+    ord1.addItem(&o1, 2);
+
+    CashPayment pay1(9001);
+    Delivery    del1(7001, "Cairo, Street 10", 10.0, "Ali");
+
+    ord1.setPayment(&pay1);
+    ord1.setDelivery(&del1);
+    ord1.printInvoice();
+
+    separator("12. Order 2 - Premium Customer, Card, Pickup (no delivery)");
+    Order ord2(5002, "2026-05-04", &cust2);
+    ord2.addItem(&e1, 1);
+    ord2.addItem(&b2, 3);
+
+    CardPayment pay2(9002, "1234123412341234");
+    ord2.setPayment(&pay2);
+    ord2.printInvoice();
+
+    separator("13. Exception - Insufficient Stock in Order");
+    try {
+        ord2.addItem(&e1, 10);
+    }
+    catch (const InsufficientStockException& e) {
+        cout << "  CAUGHT -> " << e.what()
+             << " (Requested: " << e.getRequested()
+             << ", Available: " << e.getAvailable() << ")\n";
+    }
+
+    separator("14. Exception - Invalid Card Number");
+    try {
+        CardPayment badCard(9003, "123");
+    }
+    catch (const invalid_argument& e) {
+        cout << "  CAUGHT -> " << e.what() << "\n";
+    }
+
+    separator("15. Exception - Negative Delivery Fee");
+    try {
+        Delivery badDel(7002, "Unknown", -5.0, "Nobody");
+    }
+    catch (const invalid_argument& e) {
+        cout << "  CAUGHT -> " << e.what() << "\n";
+    }
+
+    separator("16. Store Summary (UML Store class)");
+    Store smartStore("Smart Store Cairo");
+    for (Product* p : store_products) smartStore.addProduct(p);
+    smartStore.addCustomer(&cust1);
+    smartStore.addCustomer(&cust2);
+    smartStore.addOrder(&ord1);
+    smartStore.addOrder(&ord2);
+    smartStore.displayStoreSummary();
+
+    cout << "\n\n>>> All sections completed successfully.\n";
     return 0;
 }
