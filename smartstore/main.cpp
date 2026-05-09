@@ -14,12 +14,12 @@ int main() {
     separator("PART 1 - Product Management");
 
     separator("1. Creating Products");
-    Book             b1(101, "Brain Storming",  150.0,  5, "Ahmed Osama",   800);
-    Book             b2(102, "OOP Level 2",      50.0, 20, "Sultan Ali",    400);
-    Electronic_device e1(201, "Laptop",         1200.0,  3, "HP",             2);
-    Electronic_device e2(202, "Wireless Mouse",   35.0, 15, "Logitech",       1);
-    Office_supply    o1(301, "Table",            300.0, 10, "Equipment",   "Wood");
-    Office_supply    o2(302, "Notebook",          20.0, 50, "Stationery",  "Paper");
+    Book             b1(1, "Brain Storming",  150.0,  5, "Ahmed Osama",   800);
+    Book             b2(2, "OOP Level 2",      50.0, 20, "Sultan Ali",    400);
+    Electronic_device e1(3, "Laptop",         1200.0,  3, "HP",             2);
+    Electronic_device e2(4, "Wireless Mouse",   35.0, 15, "Logitech",       1);
+    Office_supply    o1(5, "Table",            300.0, 10, "Equipment",   "Wood");
+    Office_supply    o2(6, "Notebook",          20.0, 50, "Stationery",  "Paper");
     cout << "  6 products created successfully.\n";
 
     separator("2. Static Function - Total Products");
@@ -50,16 +50,16 @@ int main() {
     swapItems(b1, b2);
 
     separator("7. Operator Overloading");
-    cout << "  [operator+]  Adding 10 units to Wireless Mouse stock:\n";
+    cout << "  [+]  Adding 10 units to Wireless Mouse stock:\n";
     cout << "    Before: " << e2 << "\n";
     e2 + 10;
     cout << "    After : " << e2 << "\n";
 
-    cout << "\n  [operator==] Compare products by price:\n";
-    cout << "    b1 == b2 ? " << (b1 == b2 ? "YES (same price)" : "NO (different)") << "\n";
-    cout << "    e1 == o1 ? " << (e1 == o1 ? "YES (same price)" : "NO (different)") << "\n";
+    cout << "\n  [==] Compare products by price:\n";
+    cout << "    b1 == b2 ? " << (b1 == b2 ? "YES (same price)" : "NO (different price)") << "\n";
+    cout << "    e1 == o1 ? " << (e1 == o1 ? "YES (same price)" : "NO (different price)") << "\n";
 
-    cout << "\n  [operator<<] Stream all products:\n";
+    cout << "\n  [<<] Stream all products:\n";
     for (Product* p : store_products)
         cout << "    " << *p << "\n";
 
@@ -162,7 +162,7 @@ int main() {
         cout << "  CAUGHT -> " << e.what() << "\n";
     }
 
-    separator("16. Store Summary (UML Store class)");
+    separator("16. Store Summary");
     Store smartStore("Smart Store Cairo");
     for (Product* p : store_products) smartStore.addProduct(p);
     smartStore.addCustomer(&cust1);
@@ -170,7 +170,5 @@ int main() {
     smartStore.addOrder(&ord1);
     smartStore.addOrder(&ord2);
     smartStore.displayStoreSummary();
-
-    cout << "\n\n>>> All sections completed successfully.\n";
     return 0;
 }

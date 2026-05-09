@@ -35,7 +35,7 @@ void Product::purchase(int qty) {
          << "\". Remaining stock: " << available_quantity << "\n";
 }
 
-Product& Product::operator+(int qty) {
+Product Product::operator+(int qty) {
     if (qty < 0) throw NegativeQuantityException();
     available_quantity += qty;
     return *this;

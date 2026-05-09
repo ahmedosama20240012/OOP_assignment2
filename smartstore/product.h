@@ -65,7 +65,7 @@ public:
 
     void purchase(int qty);
 
-    Product& operator+(int qty);
+    Product operator+(int qty);
     bool     operator==(const Product& other) const;
     friend ostream& operator<<(ostream& os, const Product& p);
 
